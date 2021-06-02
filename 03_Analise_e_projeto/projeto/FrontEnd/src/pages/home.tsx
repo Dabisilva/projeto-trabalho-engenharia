@@ -19,6 +19,10 @@ export default function CountDown() {
     Router.push("/typing");
   }
 
+  function handleSubmitReactionTime() {
+    Router.push("/reactiontime");
+  }
+
   return (
     <>
       <Head>
@@ -37,7 +41,7 @@ export default function CountDown() {
                 Use o contador para te lembrar de sair um pouco do computador.
               </p>
             </CardButton>
-            <CardButton onClick={() => {}}>
+            <CardButton onClick={handleSubmitReactionTime}>
               <BsFillLightningFill />
               <span>Tempo de reação</span>
 

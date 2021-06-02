@@ -5,6 +5,7 @@ import {
   IconHome,
   IconLeaderBoard,
   ButtonSignOut,
+  IconProfile,
 } from "../styles/components/SideBar.module";
 import { GoSignOut } from "react-icons/go";
 export interface SideBarProps {
@@ -22,6 +23,11 @@ export function SideBar({ namePath }: SideBarProps) {
         <img src="/icons/SideBarLogo.svg" alt="logo" />
 
         <div>
+          <Link href="/profile">
+            <a className={namePath === "profile" ? "activeProfile" : ""}>
+              <IconProfile className="profile" />
+            </a>
+          </Link>
           <Link href="/home">
             <a className={namePath === "home" ? "active" : ""}>
               <IconHome />

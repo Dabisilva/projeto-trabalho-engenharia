@@ -1,49 +1,42 @@
+import { useEffect } from "react";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { ChallengeBox } from "../components/ChallangeBox";
-import { CompleteChallenges } from "../components/CompleteChallenges";
 import { CountDown } from "../components/CountDown";
 import { ExperienceBar } from "../components/ExperienceBar";
-import { Profile } from "../components/Profile";
 import { SideBar } from "../components/SideBar";
-import { ChallengesProvider } from "../contexts/ChallengeContext";
+import { useContextChallengerData } from "../contexts/ChallengeContext";
 import { CountdownProvider } from "../contexts/CountDownContext";
-import { Container, ProfileContainer } from "../styles/pages/Countdown.module";
+import {
+  Container,
+  CountdownContainer,
+} from "../styles/pages/Countdown.module";
 import { ChallengerProps } from "../Types/ChallengerProps";
 
 export default function countdown(props: ChallengerProps) {
+  const { getPropsFromChallenger } = useContextChallengerData();
+  useEffect(() => {
+    getPropsFromChallenger(props);
+  }, []);
   return (
     <>
       <Head>
         <title>Contador | move.it</title>
       </Head>
-      <ProfileContainer>
+      <CountdownContainer>
         <SideBar namePath="home" />
 
-        <ChallengesProvider
-          level={props.level}
-          currentExperience={props.currentExperience}
-          challengesCompleted={props.challengesCompleted}
-        >
-          <Container>
-            <ExperienceBar />
-            <CountdownProvider>
-              <section>
-                <div>
-                  <Profile />
+        <Container>
+          <ExperienceBar />
+          <CountdownProvider>
+            <section>
+              <CountDown />
 
-                  <CompleteChallenges />
-                  <CountDown />
-                </div>
-
-                <div>
-                  <ChallengeBox />
-                </div>
-              </section>
-            </CountdownProvider>
-          </Container>
-        </ChallengesProvider>
-      </ProfileContainer>
+              <ChallengeBox />
+            </section>
+          </CountdownProvider>
+        </Container>
+      </CountdownContainer>
     </>
   );
 }

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const ProfileContainer = styled.div`
+export const CountdownContainer = styled.div`
   display: grid;
 
   grid-template-rows: 7rem auto;

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ThemeProvider } from "styled-components";
 import { HeaderTheme } from "../components/HeaderTheme";
+import { ChallengesProvider } from "../contexts/ChallengeContext";
 import GlobalStylesModule from "../styles/GlobalStyles.module";
 import { ThemeName, themes } from "../styles/themes";
 
@@ -12,7 +13,9 @@ function MyApp({ Component, pageProps }) {
       <ThemeProvider theme={currentTheme}>
         <GlobalStylesModule />
         {/* <HeaderTheme themeName={themeName} setThemeName={setThemeName} /> */}
-        <Component {...pageProps} />
+        <ChallengesProvider>
+          <Component {...pageProps} />
+        </ChallengesProvider>
       </ThemeProvider>
     </>
   );

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { FiHome, FiAward } from "react-icons/fi";
+import { BsPerson } from "react-icons/bs";
 export const Container = styled.aside`
   grid-area: "SB";
 
@@ -19,7 +20,7 @@ export const Container = styled.aside`
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    height: 120px;
+    height: 12.5rem;
   }
 
   @media (max-width: 500px) {
@@ -53,7 +54,19 @@ export const Container = styled.aside`
         stroke: var(--blue);
       }
     }
+    &.activeProfile,
+    &:hover {
+      svg.profile {
+        fill: var(--blue);
+      }
+    }
   }
+`;
+
+export const IconProfile = styled(BsPerson)`
+  width: 2.5rem;
+  height: 2.5rem;
+  fill: var(--text);
 `;
 
 export const IconHome = styled(FiHome)`
