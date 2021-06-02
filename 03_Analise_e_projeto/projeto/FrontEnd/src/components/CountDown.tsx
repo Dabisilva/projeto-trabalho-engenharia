@@ -5,8 +5,6 @@ import {
   CountDownButtonActive,
 } from "../styles/components/CountDown.module";
 
-let countdownTimeout: NodeJS.Timeout;
-
 export function CountDown() {
   const {
     startCountdown,

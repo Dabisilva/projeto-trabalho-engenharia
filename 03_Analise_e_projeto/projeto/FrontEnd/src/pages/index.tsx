@@ -10,13 +10,11 @@ export default function Login() {
           <title>Login | move.it</title>
         </Head>
 
-        <section>
-          <ImageDiv>
-            <img src="/simbolo.svg" alt="simbolo" />
-          </ImageDiv>
+        <ImageDiv>
+          <img src="/simbolo.svg" alt="simbolo" />
+        </ImageDiv>
 
-          <LoginForm />
-        </section>
+        <LoginForm />
       </Container>
     </>
   );

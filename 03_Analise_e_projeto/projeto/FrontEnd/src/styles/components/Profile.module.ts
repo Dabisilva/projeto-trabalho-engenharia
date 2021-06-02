@@ -3,7 +3,6 @@ import styled from "styled-components";
 export const ProfileContainer = styled.div`
   display: flex;
   align-items: center;
-
   > img {
     width: 5.5rem;
     height: 5.5rem;

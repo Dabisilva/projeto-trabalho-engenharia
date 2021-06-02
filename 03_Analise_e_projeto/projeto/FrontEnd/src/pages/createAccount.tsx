@@ -1,26 +1,24 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
+import Router from "next/router";
 import {
   AccountContainer,
-  StepsContent,
-  Separetor,
   NextButton,
 } from "../styles/pages/CreateAccount.module";
 
 const pages: React.FC = () => {
   const [name, setName] = useState("");
-  const [age, setAge] = useState("");
-  const [birthday, setBirthday] = useState("");
-  const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setconfirmPassword] = useState("");
+
+  function handleSubmit(event: FormEvent) {
+    event.preventDefault();
+    Router.push("/home");
+  }
+
   return (
     <AccountContainer>
-      <form>
-        <StepsContent>
-          <div></div>
-          <Separetor />
-          <div />
-        </StepsContent>
+      <form onSubmit={handleSubmit}>
         <fieldset>
           <legend>Criar Conta</legend>
           <label>
@@ -35,23 +33,6 @@ const pages: React.FC = () => {
           </label>
 
           <label>
-            Idade
-            <input
-              placeholder="Digite sua idade"
-              value={age}
-              onChange={(text) => setAge(text.target.value)}
-            />
-          </label>
-          <label>
-            Aniversário
-            <input
-              type="date"
-              placeholder="Digite seu aniversário"
-              value={birthday}
-              onChange={(text) => setBirthday(text.target.value)}
-            />
-          </label>
-          <label>
             Email
             <input
               type="email"
@@ -64,15 +45,26 @@ const pages: React.FC = () => {
           <label>
             Senha
             <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Senha"
+              type="password"
+              placeholder="Digite sua senha"
               pattern="[0-9a-fa-F]{4,8}"
               value={password}
               onChange={(text) => setPassword(text.target.value)}
             />
           </label>
 
-          <NextButton>Próximo</NextButton>
+          <label>
+            Confirmar senha
+            <input
+              type="password"
+              placeholder="Confirme sua senha"
+              pattern="[0-9a-fa-F]{4,8}"
+              value={confirmPassword}
+              onChange={(text) => setconfirmPassword(text.target.value)}
+            />
+          </label>
+
+          <NextButton type="submit">Próximo</NextButton>
         </fieldset>
       </form>
     </AccountContainer>

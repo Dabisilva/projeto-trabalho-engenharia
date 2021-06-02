@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { FaArrowRight } from "react-icons/fa";
 
 export const LoginContainer = styled.div`
-  flex: 1;
   display: flex;
   flex-direction: column;
 
@@ -19,10 +18,6 @@ export const LoginContainer = styled.div`
     font-size: 1.5rem;
     color: var(--title);
     margin-bottom: 3rem;
-  }
-
-  @media (max-width: 1280px) {
-    width: 1280px;
   }
 `;
 
@@ -77,7 +72,7 @@ export const InputContent = styled.input`
 
 export const CreateAccountButton = styled.button`
   margin-top: 3rem;
-  background: var(--blue_twitter);
+  background: var(--blue_light);
 
   color: var(--white);
   font-size: 1.5rem;
