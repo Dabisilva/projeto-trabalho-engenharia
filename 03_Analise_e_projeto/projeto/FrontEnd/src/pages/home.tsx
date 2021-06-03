@@ -23,6 +23,14 @@ export default function CountDown() {
     Router.push("/reactiontime");
   }
 
+  function handleSubmitSequenceMemory() {
+    Router.push("/sequencememory");
+  }
+
+  function handleSubmitNumberMemory() {
+    Router.push("/numbermemory");
+  }
+
   return (
     <>
       <Head>
@@ -47,7 +55,7 @@ export default function CountDown() {
 
               <p>Teste seus reflexos visuais.</p>
             </CardButton>
-            <CardButton onClick={() => {}}>
+            <CardButton onClick={handleSubmitSequenceMemory}>
               <FaBrain />
               <span>Memória de sequência</span>
 
@@ -56,7 +64,7 @@ export default function CountDown() {
                 botão.
               </p>
             </CardButton>
-            <CardButton onClick={() => {}}>
+            <CardButton onClick={handleSubmitNumberMemory}>
               <TiSortNumerically />
               <span>Memória númerica</span>
 
