@@ -8,7 +8,6 @@ import {
   NumberContainer,
   NumberContent,
   StartButton,
-  TimeBar,
   FormNumber,
   AnswerContent,
 } from "../styles/pages/NumberMemory.module";
@@ -30,6 +29,7 @@ export default function numbermemory(props: ChallengerProps) {
   const [isActive, setisActive] = useState(false);
   const [next, setNext] = useState(false);
   const [answer, setAnswer] = useState(false);
+
   useEffect(() => {
     getPropsFromChallenger(props);
   }, []);
@@ -82,7 +82,8 @@ export default function numbermemory(props: ChallengerProps) {
       setCurrentTime(3);
       setLevel(1);
       setInputNumber("");
-      Start(level + 1);
+      setTime(3);
+      Start(1);
     }
   }
   return (

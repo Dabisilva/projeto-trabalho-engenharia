@@ -68,17 +68,6 @@ export const StartButton = styled.button`
   color: var(--white);
 `;
 
-export const TimeBar = styled.div`
-  align-items: center;
-  width: 5rem;
-  transition: 0.2s;
-  > div {
-    height: 4px;
-    border-radius: 4px;
-    background: var(--white);
-  }
-`;
-
 export const FormNumber = styled.form`
   display: flex;
   justify-content: space-evenly;
