@@ -70,6 +70,27 @@ export const InputContent = styled.input`
   background: linear-gradient(to right, var(--blue_dark), var(--blue));
 `;
 
+export const DivLogin = styled.div`
+  display: flex;
+  max-width: 25rem;
+  margin-top: 1rem;
+  align-items: center;
+  justify-content: center;
+  > div {
+    display: flex;
+    justify-content: space-evenly;
+    width: 50%;
+    > button {
+      background: none;
+
+      > svg {
+        width: 2rem;
+        height: 2rem;
+      }
+    }
+  }
+`;
+
 export const CreateAccountButton = styled.button`
   margin-top: 3rem;
   background: var(--blue_light);

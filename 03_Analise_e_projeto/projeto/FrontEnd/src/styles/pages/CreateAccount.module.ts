@@ -37,6 +37,16 @@ export const AccountContainer = styled.div`
     flex-direction: column;
     margin: 2rem;
     color: var(--gray_line);
+    > button {
+      background: none;
+      width: 2rem;
+      margin-left: 20rem;
+      margin-top: -2rem;
+
+      > svg {
+        stroke: var(--title);
+      }
+    }
   }
   input {
     width: 25rem;

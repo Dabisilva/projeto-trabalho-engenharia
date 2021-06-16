@@ -8,14 +8,13 @@ import {
   IconProfile,
 } from "../styles/components/SideBar.module";
 import { GoSignOut } from "react-icons/go";
+import { useAuth } from "../contexts/AuthContext";
 export interface SideBarProps {
   namePath?: string;
 }
 
 export function SideBar({ namePath }: SideBarProps) {
-  function handleSignOut() {
-    Router.push("/");
-  }
+  const { signOut } = useAuth();
 
   return (
     <>
@@ -40,7 +39,7 @@ export function SideBar({ namePath }: SideBarProps) {
           </Link>
         </div>
 
-        <ButtonSignOut onClick={handleSignOut}>
+        <ButtonSignOut onClick={signOut}>
           <GoSignOut />
         </ButtonSignOut>
       </Container>
