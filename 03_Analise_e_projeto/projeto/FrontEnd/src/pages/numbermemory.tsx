@@ -12,15 +12,14 @@ import {
   AnswerContent,
 } from "../styles/pages/NumberMemory.module";
 import { ExperienceBar } from "../components/ExperienceBar";
-import { ChallengerProps } from "../Types/ChallengerProps";
 import { GetServerSideProps } from "next";
 import { useContextChallengerData } from "../contexts/ChallengeContext";
+import { ChallengerProps } from "../Types/ChallengerProps";
 
 let countdownTimeout: NodeJS.Timeout;
 
 export default function numbermemory(props: ChallengerProps) {
-  const { startNormalChallenge, completChallengeNumber } =
-    useContextChallengerData();
+  const { getPropsFromChallenger } = useContextChallengerData();
   const [number, setNumber] = useState("");
   const [inputNumber, setInputNumber] = useState("");
   const [start, setStart] = useState(false);
@@ -31,6 +30,10 @@ export default function numbermemory(props: ChallengerProps) {
   const [next, setNext] = useState(false);
   const [answer, setAnswer] = useState(false);
 
+  useEffect(() => {
+    getPropsFromChallenger(props);
+  }, []);
+
   function genereteRandom(min: number, max: number) {
     const random = Math.floor(Math.random() * (max - min));
 
@@ -40,7 +43,6 @@ export default function numbermemory(props: ChallengerProps) {
   }
 
   function Start(levelUp: number) {
-    startNormalChallenge();
     clearTimeout(countdownTimeout);
     setStart(true);
     setTime(currentTime);
@@ -72,7 +74,6 @@ export default function numbermemory(props: ChallengerProps) {
     setAnswer(false);
 
     if (number == inputNumber) {
-      completChallengeNumber(level * 5);
       setCurrentTime(currentTime + 1);
       setLevel(level + 1);
       setInputNumber("");
@@ -159,17 +160,13 @@ export default function numbermemory(props: ChallengerProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { "moveit:username": username } = ctx.req.cookies;
+  const { level, currentExperience, challengesCompleted } = ctx.req.cookies;
 
-  if (!username) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
   return {
-    props: {},
+    props: {
+      level: Number(level),
+      currentExperience: Number(currentExperience),
+      challengesCompleted: Number(challengesCompleted),
+    },
   };
 };

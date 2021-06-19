@@ -6,10 +6,9 @@ import {
   useEffect,
 } from "react";
 import challenges from "../../challenges.json";
+import Cookies from "js-cookie";
 import { LevelUpModal } from "../components/LevelUpModal";
-import { parseCookies, setCookie } from "nookies";
-import { api } from "../services/api";
-import { useAuth } from "./AuthContext";
+import { ChallengerProps } from "../Types/ChallengerProps";
 
 interface ChallengesProviderProps {
   children: ReactNode;
@@ -20,19 +19,9 @@ interface Challenge {
   description: string;
   amount: number;
 }
-type ChallengeResponseProps = {
-  level: number;
-  challengesCompleted: number;
-  currentExperience: number;
-};
-
-type ChallengeCompletUpdadate = {
-  levelUp: number;
-  challenges: number;
-  xp: number;
-};
 
 interface ChallengesContextData {
+  getPropsFromChallenger: (props: ChallengerProps) => void;
   level: number;
   levelUp: () => void;
   currentExperience: number;
@@ -46,51 +35,34 @@ interface ChallengesContextData {
   activeChallenge: Challenge;
   experienceToNextLevel: number;
   isLevelUpModalOpen: boolean;
-  getDatesFromResponse: (date: ChallengeResponseProps) => void;
-  completChallengeNumber: (number: number) => void;
 }
 
 export const ChallengesContext = createContext({} as ChallengesContextData);
 
 export function ChallengesProvider({ children }: ChallengesProviderProps) {
-  const { email } = useAuth();
-  const {
-    "moveit:level": cookieLevel,
-    "moveit:currentExperience": cookieCurrentExperience,
-    "moveit:challengesCompleted": cookieChallengeCompleted,
-  } = parseCookies();
-
-  const [level, setLevel] = useState<number>(Number(cookieLevel));
-  const [currentExperience, setCurrentExperience] = useState<number>(
-    Number(cookieCurrentExperience)
-  );
-  const [challengesCompleted, setChallengesCompleted] = useState<number>(
-    Number(cookieChallengeCompleted)
-  );
+  const [level, setLevel] = useState<number>();
+  const [currentExperience, setCurrentExperience] = useState<number>();
+  const [challengesCompleted, setChallengesCompleted] = useState<number>();
   const [activeChallenge, setActiveChallenge] = useState(null);
 
   const [isLevelUpModalOpen, setIsLevelUpModalOpen] = useState(false);
 
   const experienceToNextLevel = Math.pow((level + 1) * 4, 2);
 
+  function getPropsFromChallenger(props: ChallengerProps) {
+    setLevel(props.level);
+    setCurrentExperience(props.currentExperience);
+    setChallengesCompleted(props.challengesCompleted);
+  }
+
   useEffect(() => {
     Notification.requestPermission();
   }, []);
 
   useEffect(() => {
-    if (level != NaN) {
-      setCookie(undefined, "moveit:level", String(level));
-      setCookie(
-        undefined,
-        "moveit:currentExperience",
-        String(currentExperience)
-      );
-      setCookie(
-        undefined,
-        "moveit:challengesCompleted",
-        String(challengesCompleted)
-      );
-    }
+    Cookies.set("level", String(level));
+    Cookies.set("currentExperience", String(currentExperience));
+    Cookies.set("challengesCompleted", String(challengesCompleted));
   }, [level, currentExperience, challengesCompleted]);
 
   function levelUp() {
@@ -130,12 +102,6 @@ export function ChallengesProvider({ children }: ChallengesProviderProps) {
     const { amount } = activeChallenge;
     let finalExperience = currentExperience + amount;
 
-    let form = {
-      xp: finalExperience,
-      challenges: challengesCompleted + 1,
-      levelUp: level + 1,
-    };
-    updateDatesChallenger(form);
     if (finalExperience >= experienceToNextLevel) {
       finalExperience = finalExperience - experienceToNextLevel;
       levelUp();
@@ -169,62 +135,12 @@ export function ChallengesProvider({ children }: ChallengesProviderProps) {
     setCurrentExperience(finalExperience);
     setChallengesCompleted(challengesCompleted + 1);
     setActiveChallenge(null);
-    let form = {
-      xp: finalExperience,
-      challenges: challengesCompleted + 1,
-      levelUp: level + 1,
-    };
-    updateDatesChallenger(form);
   }
 
-  function completChallengeNumber(number: number) {
-    if (!activeChallenge) {
-      return;
-    }
-
-    let finalExperience = currentExperience + number;
-
-    if (finalExperience >= experienceToNextLevel) {
-      finalExperience = finalExperience - experienceToNextLevel;
-      levelUp();
-    }
-
-    setCurrentExperience(finalExperience);
-    setChallengesCompleted(challengesCompleted + 1);
-    setActiveChallenge(null);
-    let form = {
-      xp: finalExperience,
-      challenges: challengesCompleted + 1,
-      levelUp: level + 1,
-    };
-    updateDatesChallenger(form);
-  }
-
-  function getDatesFromResponse(date: ChallengeResponseProps) {
-    setLevel(date.level);
-    setCurrentExperience(date.currentExperience);
-    setChallengesCompleted(date.challengesCompleted);
-  }
-
-  async function updateDatesChallenger({
-    xp,
-    challenges,
-    levelUp,
-  }: ChallengeCompletUpdadate) {
-    await api
-      .put("updateLevelStats", {
-        email,
-        xp,
-        challenges,
-        level: levelUp,
-      })
-      .then((response) => {
-        console.log(response.data);
-      });
-  }
   return (
     <ChallengesContext.Provider
       value={{
+        getPropsFromChallenger,
         level,
         levelUp,
         currentExperience,
@@ -238,8 +154,6 @@ export function ChallengesProvider({ children }: ChallengesProviderProps) {
         completChallengeNormal,
         isLevelUpModalOpen,
         closeLevelUpModal,
-        getDatesFromResponse,
-        completChallengeNumber,
       }}
     >
       {children}

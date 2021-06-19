@@ -12,10 +12,13 @@ import {
   StartButton,
 } from "../styles/pages/SequenceMemory.module";
 import { ExperienceBar } from "../components/ExperienceBar";
-import { ChallengerProps } from "../Types/ChallengerProps";
 import { GetServerSideProps } from "next";
+import { useContextChallengerData } from "../contexts/ChallengeContext";
+import { ChallengerProps } from "../Types/ChallengerProps";
 
 export default function sequencememory(props: ChallengerProps) {
+  const { getPropsFromChallenger } = useContextChallengerData();
+
   const [start, setStart] = useState(false);
   const [level, setLevel] = useState(1);
   const [activeTapButton, setActiveTapButton] = useState("");
@@ -38,6 +41,10 @@ export default function sequencememory(props: ChallengerProps) {
       setActiveTapButton("");
     }, 200);
   }, [activeTapButton]);
+
+  useEffect(() => {
+    getPropsFromChallenger(props);
+  }, []);
 
   async function startSequence() {
     setStart(true);
@@ -155,17 +162,13 @@ export default function sequencememory(props: ChallengerProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { "moveit:username": username } = ctx.req.cookies;
+  const { level, currentExperience, challengesCompleted } = ctx.req.cookies;
 
-  if (!username) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
   return {
-    props: {},
+    props: {
+      level: Number(level),
+      currentExperience: Number(currentExperience),
+      challengesCompleted: Number(challengesCompleted),
+    },
   };
 };

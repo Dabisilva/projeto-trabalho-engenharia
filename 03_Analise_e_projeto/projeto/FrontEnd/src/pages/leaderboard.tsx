@@ -1,4 +1,3 @@
-import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { SideBar } from "../components/SideBar";
 import {
@@ -39,6 +38,11 @@ export default function Leadboard() {
               <tr>
                 <td>1</td>
                 <TdProfile>
+                  <img
+                    src="https://avatars.githubusercontent.com/u/57877449?v=4"
+                    alt="foto"
+                  />
+
                   <div>
                     <span>Davi Barbosa</span>
                     <UserLevelContainer>
@@ -60,6 +64,11 @@ export default function Leadboard() {
               <tr>
                 <td>1</td>
                 <TdProfile>
+                  <img
+                    src="https://avatars.githubusercontent.com/u/57877449?v=4"
+                    alt="foto"
+                  />
+
                   <div>
                     <span>Davi Barbosa</span>
                     <UserLevelContainer>
@@ -85,19 +94,3 @@ export default function Leadboard() {
     </>
   );
 }
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { "moveit:username": username } = ctx.req.cookies;
-
-  if (!username) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
-  return {
-    props: {},
-  };
-};

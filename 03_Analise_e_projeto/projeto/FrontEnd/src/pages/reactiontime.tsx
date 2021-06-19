@@ -12,12 +12,15 @@ import {
   ReactionFinished,
 } from "../styles/pages/ReactionTime.module";
 import { ExperienceBar } from "../components/ExperienceBar";
-import { BsClockFill } from "react-icons/bs";
 import { GetServerSideProps } from "next";
+import { useContextChallengerData } from "../contexts/ChallengeContext";
+import { ChallengerProps } from "../Types/ChallengerProps";
+import { BsClockFill } from "react-icons/bs";
 
 let countdownTimeout: NodeJS.Timeout;
 
-export default function ReactionTime() {
+export default function ReactionTime(props: ChallengerProps) {
+  const { getPropsFromChallenger } = useContextChallengerData();
   const [start, setStart] = useState(false);
   const [click, setClick] = useState(false);
 
@@ -61,6 +64,9 @@ export default function ReactionTime() {
     handleReactionTime();
   }
 
+  useEffect(() => {
+    getPropsFromChallenger(props);
+  }, []);
   return (
     <>
       <Head>
@@ -110,17 +116,13 @@ export default function ReactionTime() {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { "moveit:username": username } = ctx.req.cookies;
+  const { level, currentExperience, challengesCompleted } = ctx.req.cookies;
 
-  if (!username) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
   return {
-    props: {},
+    props: {
+      level: Number(level),
+      currentExperience: Number(currentExperience),
+      challengesCompleted: Number(challengesCompleted),
+    },
   };
 };
