@@ -6,10 +6,8 @@ import {
 } from "../styles/components/ExperienceBar.module";
 
 export function ExperienceBar() {
-  const {
-    currentExperience,
-    experienceToNextLevel,
-  } = useContextChallengerData();
+  const { currentExperience, experienceToNextLevel } =
+    useContextChallengerData();
 
   const percentToNextlevel =
     Math.round(currentExperience * 100) / experienceToNextLevel;

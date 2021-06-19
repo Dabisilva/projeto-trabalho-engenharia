@@ -8,16 +8,21 @@ import {
   ButtonEneble,
   ArrowLogo,
   CreateAccountButton,
+  DivLogin,
 } from "../styles/components/LoginForm.module";
-import Router from "next/router";
+import { signIn as NextSignIn } from "next-auth/client";
+import { useAuth } from "../contexts/AuthContext";
+import { FaGithub } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 
 export function LoginForm() {
+  const { signIn } = useAuth();
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
-    Router.push("/home");
+    signIn(name, password);
   }
   return (
     <LoginContainer>
@@ -43,20 +48,27 @@ export function LoginForm() {
             type="password"
           />
 
-          {password.length === 0 ? (
+          {password.length < 8 ? (
             <ButtonDisable disabled>
               <ArrowLogo />
             </ButtonDisable>
           ) : (
-            // <Link href="/home">
             <ButtonEneble type="submit">
               <ArrowLogo />
             </ButtonEneble>
-            // </Link>
           )}
         </LabelContent>
       </form>
-
+      <DivLogin>
+        <div>
+          <button onClick={() => NextSignIn("github")}>
+            <FaGithub />
+          </button>
+          <button>
+            <FcGoogle onClick={() => NextSignIn("google")} />
+          </button>
+        </div>
+      </DivLogin>
       <Link href="/createAccount">
         <CreateAccountButton>Criar conta</CreateAccountButton>
       </Link>
