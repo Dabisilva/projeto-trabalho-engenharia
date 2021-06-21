@@ -4,12 +4,12 @@ import { ProfileContainer } from "../styles/components/Profile.module";
 
 export function Profile() {
   const { level } = useContextChallengerData();
-  const { nome } = useAuth();
+  const { user } = useAuth();
 
   return (
     <ProfileContainer>
       <div>
-        <strong>{nome}</strong>
+        <strong>{user?.nome}</strong>
         <p>
           <img src="icons/level.svg" alt="Level" />
           Level {level}

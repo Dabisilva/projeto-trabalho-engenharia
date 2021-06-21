@@ -72,7 +72,7 @@ export default function numbermemory(props: ChallengerProps) {
     setAnswer(false);
 
     if (number == inputNumber) {
-      completChallengeNumber(level * 5);
+      completChallengeNumber(level * 10);
       setCurrentTime(currentTime + 1);
       setLevel(level + 1);
       setInputNumber("");
@@ -159,9 +159,9 @@ export default function numbermemory(props: ChallengerProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { "moveit:username": username } = ctx.req.cookies;
+  const { "moveit:user": user } = ctx.req.cookies;
 
-  if (!username) {
+  if (!user) {
     return {
       redirect: {
         destination: "/",

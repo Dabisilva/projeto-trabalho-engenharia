@@ -26,7 +26,7 @@ export default function Login() {
           toast.success("Sucesso", {
             position: "top-center",
           });
-          getUserFromResponse(response.data);
+          getUserFromResponse(response.data, null);
           getDatesFromResponse({
             challengesCompleted: response.data.challenges,
             currentExperience: response.data.xp,
@@ -61,9 +61,9 @@ export default function Login() {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { "moveit:username": username } = ctx.req.cookies;
+  const { "moveit:user": user } = ctx.req.cookies;
 
-  if (username) {
+  if (user) {
     return {
       redirect: {
         destination: "/home",

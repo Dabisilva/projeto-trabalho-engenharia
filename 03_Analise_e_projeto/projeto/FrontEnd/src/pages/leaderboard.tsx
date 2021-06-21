@@ -1,6 +1,7 @@
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { SideBar } from "../components/SideBar";
+import { api } from "../services/api";
 import {
   ProfileContainer,
   Container,
@@ -10,7 +11,21 @@ import {
   FirstdDivHead,
   DivGrid,
 } from "../styles/pages/Leaderboard.module";
-export default function Leadboard() {
+
+type User = {
+  id: number;
+  nome: string;
+  email: string;
+  xp: number;
+  challenges: number;
+  level: number;
+};
+
+interface LeaderboardProps {
+  leaderBoard: User[];
+}
+
+export default function Leadboard({ leaderBoard }: LeaderboardProps) {
   return (
     <>
       <Head>
@@ -36,48 +51,29 @@ export default function Leadboard() {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <TdProfile>
-                  <div>
-                    <span>Davi Barbosa</span>
-                    <UserLevelContainer>
-                      <img src="icons/level.svg" alt="Level" />
-                      <p>Level 42</p>
-                    </UserLevelContainer>
-                  </div>
-                </TdProfile>
+              {leaderBoard.map((leader, index) => (
+                <tr key={leader.id}>
+                  <td>{index + 1}</td>
+                  <TdProfile>
+                    <div>
+                      <span>{leader.nome}</span>
+                      <UserLevelContainer>
+                        <img src="icons/level.svg" alt="Level" />
+                        <p>Level {leader.level}</p>
+                      </UserLevelContainer>
+                    </div>
+                  </TdProfile>
 
-                <DivGrid />
-                <td>
-                  <span>127</span> completados
-                </td>
+                  <DivGrid />
+                  <td>
+                    <span>{leader.challenges}</span> completados
+                  </td>
 
-                <td>
-                  <span>127000</span> xp
-                </td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <TdProfile>
-                  <div>
-                    <span>Davi Barbosa</span>
-                    <UserLevelContainer>
-                      <img src="icons/level.svg" alt="Level" />
-                      <p>Level 42</p>
-                    </UserLevelContainer>
-                  </div>
-                </TdProfile>
-
-                <DivGrid />
-                <td>
-                  <span>127</span> completados
-                </td>
-
-                <td>
-                  <span>127000</span> xp
-                </td>
-              </tr>
+                  <td>
+                    <span>{leader.xp}</span> xp
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </Container>
@@ -87,9 +83,15 @@ export default function Leadboard() {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { "moveit:username": username } = ctx.req.cookies;
+  const { "moveit:user": user } = ctx.req.cookies;
 
-  if (!username) {
+  let leaderBoard: User[];
+
+  const response = await api.get("leaderBoard");
+
+  leaderBoard = response.data;
+
+  if (!user) {
     return {
       redirect: {
         destination: "/",
@@ -98,6 +100,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
   return {
-    props: {},
+    props: {
+      leaderBoard,
+    },
   };
 };

@@ -35,9 +35,9 @@ export default function countdown() {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { "moveit:username": username } = ctx.req.cookies;
+  const { "moveit:user": user } = ctx.req.cookies;
 
-  if (!username) {
+  if (!user) {
     return {
       redirect: {
         destination: "/",

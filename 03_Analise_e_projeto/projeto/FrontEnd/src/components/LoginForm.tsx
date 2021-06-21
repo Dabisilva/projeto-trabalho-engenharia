@@ -17,12 +17,12 @@ import { FcGoogle } from "react-icons/fc";
 
 export function LoginForm() {
   const { signIn } = useAuth();
-  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
-    signIn(name, password);
+    signIn(email, password);
   }
   return (
     <LoginContainer>
@@ -34,9 +34,9 @@ export function LoginForm() {
         <LabelContent>
           <InputContent
             autoFocus
-            placeholder="Digite seu username"
-            value={name}
-            onChange={(text) => setName(text.target.value)}
+            placeholder="Digite seu email"
+            value={email}
+            onChange={(text) => setEmail(text.target.value)}
             type="text"
           />
         </LabelContent>

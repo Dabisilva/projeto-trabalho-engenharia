@@ -1,12 +1,21 @@
 import { GetServerSideProps } from "next";
 import Head from "next/head";
+import { useState } from "react";
 import { CompleteChallenges } from "../components/CompleteChallenges";
 import { ExperienceBar } from "../components/ExperienceBar";
 import { Profile } from "../components/Profile";
 import { SideBar } from "../components/SideBar";
+import { useAuth } from "../contexts/AuthContext";
 import { Container, ProfileContainer } from "../styles/pages/Profile.module";
+import { UpdateUser } from "../components/UpdateUser";
 
-export default function profile() {
+interface ProfileProps {
+  token: string | null;
+}
+
+export default function profile({ token }: ProfileProps) {
+  const { update, setupdate } = useAuth();
+
   return (
     <>
       <Head>
@@ -16,12 +25,24 @@ export default function profile() {
         <SideBar namePath="profile" />
 
         <Container>
-          <ExperienceBar />
-          <section>
-            <Profile />
+          {!update ? (
+            <>
+              <ExperienceBar />
+              <div>
+                <section>
+                  <Profile />
 
-            <CompleteChallenges />
-          </section>
+                  <CompleteChallenges />
+                </section>
+
+                {!!token === false && (
+                  <button onClick={setupdate}>Editar</button>
+                )}
+              </div>
+            </>
+          ) : (
+            <UpdateUser />
+          )}
         </Container>
       </ProfileContainer>
     </>
@@ -29,9 +50,10 @@ export default function profile() {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { "moveit:username": username } = ctx.req.cookies;
+  const { "moveit:user": user, "next-auth.session-token": token } =
+    ctx.req.cookies;
 
-  if (!username) {
+  if (!user) {
     return {
       redirect: {
         destination: "/",
@@ -40,6 +62,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
   return {
-    props: {},
+    props: {
+      token: !!token === true ? token : null,
+    },
   };
 };

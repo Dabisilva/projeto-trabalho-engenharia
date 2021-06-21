@@ -119,7 +119,11 @@ export const UserLevelContainer = styled.div`
 `;
 
 export const TdProfile = styled.td`
-  justify-content: none;
+  display: flex;
+  > div {
+    flex: 1;
+    padding-left: 3rem;
+  }
 `;
 
 export const FirstdDivHead = styled.div`

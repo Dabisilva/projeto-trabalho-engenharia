@@ -11,8 +11,22 @@ import { BsClockFill, BsFillLightningFill } from "react-icons/bs";
 import { FaBrain, FaKeyboard } from "react-icons/fa";
 import { TiSortNumerically } from "react-icons/ti";
 import { GetServerSideProps } from "next";
+import {
+  ChallengeResponseProps,
+  useContextChallengerData,
+} from "../contexts/ChallengeContext";
+import { useEffect } from "react";
 
-export default function home() {
+interface HomeProps {
+  challenges: ChallengeResponseProps;
+}
+
+export default function home({ challenges }: HomeProps) {
+  const { getDatesFromResponse } = useContextChallengerData();
+
+  useEffect(() => {
+    getDatesFromResponse(challenges);
+  }, []);
   function handleSubmitCountDown() {
     Router.push("/countdown");
   }
@@ -86,9 +100,20 @@ export default function home() {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { "moveit:username": username } = ctx.req.cookies;
+  const {
+    "moveit:user": user,
+    "moveit:level": cookieLevel,
+    "moveit:currentExperience": cookieCurrentExperience,
+    "moveit:challengesCompleted": cookieChallengeCompleted,
+  } = ctx.req.cookies;
 
-  if (!username) {
+  const challenges = {
+    level: Number(cookieLevel),
+    challengesCompleted: Number(cookieChallengeCompleted),
+    currentExperience: Number(cookieCurrentExperience),
+  };
+
+  if (!user) {
     return {
       redirect: {
         destination: "/",
@@ -97,6 +122,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
   return {
-    props: {},
+    props: {
+      challenges,
+    },
   };
 };

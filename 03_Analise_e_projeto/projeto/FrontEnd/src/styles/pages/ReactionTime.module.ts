@@ -32,6 +32,14 @@ export const Content = styled.div`
     color: var(--text_highlight);
     font-weight: 600;
   }
+
+  > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3rem;
+    margin-bottom: -5rem;
+  }
 `;
 
 export const ReactionTimeContainer = styled.div`
@@ -59,7 +67,8 @@ export const ReactionTimeStart = styled.button`
     font-size: 5rem;
     color: var(--white);
   }
-  h2 {
+  h2,
+  h3 {
     font-size: 3rem;
     color: var(--white);
   }
@@ -78,7 +87,8 @@ export const ReactionClick = styled.button`
     font-size: 5rem;
     color: var(--white);
   }
-  h2 {
+  h2,
+  h3 {
     font-size: 3rem;
     color: var(--white);
   }
@@ -99,8 +109,43 @@ export const ReactionFinished = styled.button`
     font-size: 3rem;
     margin-bottom: 2rem;
   }
-  h2 {
+  h2,
+  h3 {
     font-size: 3rem;
     color: var(--white);
+  }
+`;
+
+export const AvarageContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary);
+  width: 40rem;
+  height: 30rem;
+  border-radius: 10px;
+
+  svg {
+    color: var(--white);
+    font-size: 3rem;
+    margin-bottom: 2rem;
+  }
+  h3 {
+    font-size: 3rem;
+    color: var(--white);
+  }
+
+  button {
+    margin-top: 2rem;
+    width: 10rem;
+    height: 2rem;
+    background: var(--green);
+    color: var(--white);
+    transition: 0.2s;
+  }
+
+  button:hover {
+    filter: brightness(0.9);
   }
 `;

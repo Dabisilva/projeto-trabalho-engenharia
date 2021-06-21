@@ -58,7 +58,7 @@ export default function createAccount() {
         toast.success("Usuário criado com sucesso", {
           position: "top-center",
         });
-        getUserFromResponse(response.data);
+        getUserFromResponse(response.data, null);
       })
       .catch((err) => {
         let message = err.response.data.message;

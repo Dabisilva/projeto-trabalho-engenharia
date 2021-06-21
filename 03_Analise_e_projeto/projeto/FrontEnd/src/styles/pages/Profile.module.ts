@@ -22,6 +22,19 @@ export const Container = styled.div`
 
   display: flex;
   flex-direction: column;
+
+  > div {
+    display: flex;
+    justify-content: space-between;
+
+    > button {
+      margin-top: 4rem;
+      width: 5rem;
+      height: 2rem;
+      background: var(--blue);
+      color: var(--white);
+    }
+  }
   section {
     flex: 1;
     display: flex;
