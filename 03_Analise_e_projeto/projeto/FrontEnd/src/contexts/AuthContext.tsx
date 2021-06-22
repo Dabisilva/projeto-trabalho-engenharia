@@ -97,7 +97,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
       })
       .catch((err) => {
         let message = err.response.data.message;
-        toast.error(message);
+        if (message) {
+          toast.error(message);
+        } else {
+          toast.error("Erro ao tentar logar");
+        }
       });
   }
 

@@ -13,12 +13,22 @@ import useTypingGame from "react-typing-game-hook";
 import { ExperienceBar } from "../components/ExperienceBar";
 import { useContextChallengerData } from "../contexts/ChallengeContext";
 import { GetServerSideProps } from "next";
+import { api } from "../services/api";
 
-export default function Typing() {
+interface TypingProps{
+  typing : {
+    description: string;
+    amount: number;
+  }
+}
+
+export default function Typing({typing}: TypingProps) {
   const { startNormalChallenge, completChallengeTyping, resetChallenge } =
     useContextChallengerData();
   const [duration, setDuration] = useState(0);
-  const [words, setWords] = useState("Teste de digitação com xp.");
+
+  const [words, setWords] = useState(typing.description);
+  const [challenge, setChallenge] = useState(typing)
 
   const {
     states: {
@@ -50,7 +60,7 @@ export default function Typing() {
   useEffect(() => {
     if (phase === 2 && endTime && startTime) {
       let porcentXp = Math.round(
-        80 *
+        challenge.amount *
           (Number(((correctChar / words.length / errorChar) * 100).toFixed(2)) /
             100)
       );
@@ -74,7 +84,7 @@ export default function Typing() {
           <TypeContainer>
             <TypeContent
               onKeyDown={(e) => {
-                startNormalChallenge();
+                startNormalChallenge(challenge);
                 const key = e.key;
                 if (key === "Escape") {
                   resetTyping();
@@ -130,6 +140,10 @@ export default function Typing() {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { "moveit:user": user } = ctx.req.cookies;
 
+  const response = await api.get("typing")
+
+  const typing = response.data
+
   if (!user) {
     return {
       redirect: {
@@ -139,6 +153,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
   return {
-    props: {},
+    props: {
+      typing
+    },
   };
 };

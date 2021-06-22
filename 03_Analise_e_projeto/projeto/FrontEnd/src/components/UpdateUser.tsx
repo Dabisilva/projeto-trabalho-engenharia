@@ -7,8 +7,8 @@ import { api } from "../services/api";
 
 export function UpdateUser() {
   const { setupdate, user, getUserFromResponse } = useAuth();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [name, setName] = useState(user?.nome);
+  const [email, setEmail] = useState(user?.email);
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassoword] = useState(false);
   const [confirmPassword, setconfirmPassword] = useState("");

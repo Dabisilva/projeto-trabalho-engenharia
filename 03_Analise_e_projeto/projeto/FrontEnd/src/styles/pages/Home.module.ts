@@ -79,8 +79,4 @@ export const CardButton = styled.button`
   &:hover {
     transform: scale(1.1);
   }
-
-  &:last-child {
-    width: 30rem;
-  }
 `;

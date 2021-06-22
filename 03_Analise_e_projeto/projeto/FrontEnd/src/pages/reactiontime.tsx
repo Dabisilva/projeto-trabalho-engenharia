@@ -62,17 +62,23 @@ export default function ReactionTime() {
   }
 
   function handleReactionTime() {
-    if (!activeChallenge) {
-      startNormalChallenge();
+    
+    if (!!activeChallenge === false) {
+      startNormalChallenge("challenge");
+      setAvarageBoolean(false)
+      setCountTypeTime(1)
+    }else {
+      setStart(true);
+      setTimeout(() => {
+        setStart(false);
+        setClick(true);
+        startCountdown();
+      }, 5000);
     }
-    setStart(true);
-    setTimeout(() => {
-      setStart(false);
-      setClick(true);
-      startCountdown();
-    }, 1000);
+    
   }
 
+  console.log(avarageBoolean)
   function handleResetAndStart() {
     setHasFinished(false);
     setTime(0);
@@ -88,7 +94,6 @@ export default function ReactionTime() {
     const avarage = Math.round(countMsTime / 5);
 
     if (avarage <= 200) {
-      console.log(avarage, "muito bom");
       completChallengeReactionTime(200);
       setXp(200);
     }
@@ -99,7 +104,6 @@ export default function ReactionTime() {
     if (avarage <= 400 && avarage > 300) {
       completChallengeReactionTime(50);
       setXp(50);
-      console.log(avarage, "ok");
     }
     if (avarage >= 500) {
       completChallengeReactionTime(30);

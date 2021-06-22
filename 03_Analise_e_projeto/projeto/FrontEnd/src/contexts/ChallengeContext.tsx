@@ -39,7 +39,7 @@ interface ChallengesContextData {
   currentExperience: number;
   challengesCompleted: number;
   startNewChallenge: () => void;
-  startNormalChallenge: () => void;
+  startNormalChallenge: (challenges: any | "challenge") => void;
   resetChallenge: () => void;
   completChallenge: () => void;
   completChallengeTyping: (number: number) => void;
@@ -75,14 +75,12 @@ export function ChallengesProvider({ children }: ChallengesProviderProps) {
 
   const experienceToNextLevel = Math.pow((level + 1) * 4, 2);
 
-  console.log(level);
   useEffect(() => {
     Notification.requestPermission();
   }, []);
 
   useEffect(() => {
     if (level != NaN) {
-      console.log("ok");
       setCookie(undefined, "moveit:level", String(level));
       setCookie(
         undefined,
@@ -106,19 +104,24 @@ export function ChallengesProvider({ children }: ChallengesProviderProps) {
     setIsLevelUpModalOpen(false);
   }
 
-  function startNewChallenge() {
-    const randomChallengeIndex = Math.floor(Math.random() * challenges.length);
+  async function startNewChallenge() {
+    try {
+      const response = await api.get("challenges")
+    
+      const challenge = response.data
 
-    const challenge = challenges[randomChallengeIndex];
+      setActiveChallenge(challenge);
 
-    setActiveChallenge(challenge);
+      new Audio("/notification.mp3").play();
 
-    new Audio("/notification.mp3").play();
-
-    if (Notification.permission === "granted") {
-      new Notification("Novo desafio 🚀", {
-        body: `Valendo ${challenge.amount}xp!`,
-      });
+      if (Notification.permission === "granted") {
+        new Notification("Novo desafio 🚀", {
+          body: `Valendo ${challenge.amount}xp!`,
+        });
+      }
+    } catch (error) {
+      let message = error.response?.data.message;
+      toast.error(message);
     }
   }
 
@@ -134,15 +137,24 @@ export function ChallengesProvider({ children }: ChallengesProviderProps) {
     const { amount } = activeChallenge;
     let finalExperience = currentExperience + amount;
 
-    let form = {
-      xp: finalExperience,
-      challenges: challengesCompleted + 1,
-      levelUp: level + 1,
-    };
-    updateDatesChallenger(form);
+
     if (finalExperience >= experienceToNextLevel) {
       finalExperience = finalExperience - experienceToNextLevel;
       levelUp();
+
+      let form = {
+        xp: finalExperience,
+        challenges: challengesCompleted + 1,
+        levelUp: level + 1,
+      };
+      updateDatesChallenger(form);
+    }else {
+      let form = {
+        xp: finalExperience,
+        challenges: challengesCompleted + 1,
+        levelUp: level,
+      };
+      updateDatesChallenger(form);
     }
 
     setCurrentExperience(finalExperience);
@@ -150,11 +162,11 @@ export function ChallengesProvider({ children }: ChallengesProviderProps) {
     setActiveChallenge(null);
   }
 
-  function startNormalChallenge() {
+  function startNormalChallenge(challenges: any | "challenge") {
     if (activeChallenge) {
       return;
     } else {
-      setActiveChallenge("challenge");
+      setActiveChallenge(challenges);
     }
   }
 
@@ -168,17 +180,25 @@ export function ChallengesProvider({ children }: ChallengesProviderProps) {
     if (finalExperience >= experienceToNextLevel) {
       finalExperience = finalExperience - experienceToNextLevel;
       levelUp();
+
+      let form = {
+        xp: finalExperience,
+        challenges: challengesCompleted + 1,
+        levelUp: level + 1,
+      };
+      updateDatesChallenger(form);
+    }else {
+      let form = {
+        xp: finalExperience,
+        challenges: challengesCompleted + 1,
+        levelUp: level,
+      };
+      updateDatesChallenger(form);
     }
 
     setCurrentExperience(finalExperience);
     setChallengesCompleted(challengesCompleted + 1);
     setActiveChallenge(null);
-    let form = {
-      xp: finalExperience,
-      challenges: challengesCompleted + 1,
-      levelUp: level + 1,
-    };
-    updateDatesChallenger(form);
   }
 
   function completChallengeNumber(number: number) {
@@ -191,17 +211,25 @@ export function ChallengesProvider({ children }: ChallengesProviderProps) {
     if (finalExperience >= experienceToNextLevel) {
       finalExperience = finalExperience - experienceToNextLevel;
       levelUp();
+
+      let form = {
+        xp: finalExperience,
+        challenges: challengesCompleted + 1,
+        levelUp: level + 1,
+      };
+      updateDatesChallenger(form);
+    }else {
+      let form = {
+        xp: finalExperience,
+        challenges: challengesCompleted + 1,
+        levelUp: level,
+      };
+      updateDatesChallenger(form);
     }
 
     setCurrentExperience(finalExperience);
     setChallengesCompleted(challengesCompleted + 1);
     setActiveChallenge(null);
-    let form = {
-      xp: finalExperience,
-      challenges: challengesCompleted + 1,
-      levelUp: level + 1,
-    };
-    updateDatesChallenger(form);
   }
 
   function completChallengeReactionTime(number: number) {
@@ -214,17 +242,25 @@ export function ChallengesProvider({ children }: ChallengesProviderProps) {
     if (finalExperience >= experienceToNextLevel) {
       finalExperience = finalExperience - experienceToNextLevel;
       levelUp();
+
+      let form = {
+        xp: finalExperience,
+        challenges: challengesCompleted + 1,
+        levelUp: level + 1,
+      };
+      updateDatesChallenger(form);
+    }else {
+      let form = {
+        xp: finalExperience,
+        challenges: challengesCompleted + 1,
+        levelUp: level,
+      };
+      updateDatesChallenger(form);
     }
 
     setCurrentExperience(finalExperience);
     setChallengesCompleted(challengesCompleted + 1);
     setActiveChallenge(null);
-    let form = {
-      xp: finalExperience,
-      challenges: challengesCompleted + 1,
-      levelUp: level + 1,
-    };
-    updateDatesChallenger(form);
   }
 
   function getDatesFromResponse(item: ChallengeResponseProps) {

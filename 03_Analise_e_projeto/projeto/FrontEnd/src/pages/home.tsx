@@ -39,10 +39,6 @@ export default function home({ challenges }: HomeProps) {
     Router.push("/reactiontime");
   }
 
-  function handleSubmitSequenceMemory() {
-    Router.push("/sequencememory");
-  }
-
   function handleSubmitNumberMemory() {
     Router.push("/numbermemory");
   }
@@ -71,15 +67,7 @@ export default function home({ challenges }: HomeProps) {
 
               <p>Teste seus reflexos visuais.</p>
             </CardButton>
-            <CardButton onClick={handleSubmitSequenceMemory}>
-              <FaBrain />
-              <span>Memória de sequência</span>
 
-              <p>
-                Lembre-se de um padrão cada vez mais longo de pressionamentos de
-                botão.
-              </p>
-            </CardButton>
             <CardButton onClick={handleSubmitNumberMemory}>
               <TiSortNumerically />
               <span>Memória númerica</span>

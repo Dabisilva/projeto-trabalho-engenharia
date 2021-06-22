@@ -121,7 +121,7 @@ export const AnswerContent = styled.div`
   button {
     margin-top: 2rem;
     width: 10rem;
-    height: 2rem;
+    height: 2.5rem;
     color: var(--white);
     background: var(--green);
 

@@ -40,7 +40,7 @@ export default function numbermemory(props: ChallengerProps) {
   }
 
   function Start(levelUp: number) {
-    startNormalChallenge();
+    startNormalChallenge("challenge");
     clearTimeout(countdownTimeout);
     setStart(true);
     setTime(currentTime);
@@ -72,12 +72,12 @@ export default function numbermemory(props: ChallengerProps) {
     setAnswer(false);
 
     if (number == inputNumber) {
-      completChallengeNumber(level * 10);
       setCurrentTime(currentTime + 1);
       setLevel(level + 1);
       setInputNumber("");
       Start(level + 1);
     } else {
+      completChallengeNumber(level * 10);
       setCurrentTime(3);
       setLevel(1);
       setInputNumber("");
@@ -146,7 +146,7 @@ export default function numbermemory(props: ChallengerProps) {
                     onClick={compareNumberForNext}
                     className={number == inputNumber ? "" : "error"}
                   >
-                    {number == inputNumber ? "Próximo" : "Tente novamente"}
+                    {number == inputNumber ? "Próximo" : "Salvar e tentar novamente"}
                   </button>
                 </AnswerContent>
               )}

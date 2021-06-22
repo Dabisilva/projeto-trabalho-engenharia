@@ -26,7 +26,7 @@ export default function createAccount() {
       /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%*()_+^&}{:;?.])(?:([0-9a-zA-Z!@#$%;*(){}_+^&])){8,}$/;
 
     if (name.length < 2) {
-      toast.error("Digite seu nome completo");
+      toast.error("Digite seu nome");
     } else if (password.length < 8) {
       toast.error("Senha deve possuir pelo menos 8 caractéres");
     } else if (password != confirmPassword) {
@@ -52,6 +52,7 @@ export default function createAccount() {
       email: removeSpaces(email),
       senha: password,
     };
+    toast.warn("carregando...");
     await api
       .post("create", form)
       .then((response) => {
