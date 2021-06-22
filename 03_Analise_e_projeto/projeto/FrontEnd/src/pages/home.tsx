@@ -10,7 +10,9 @@ import {
 import { BsClockFill, BsFillLightningFill } from "react-icons/bs";
 import { FaBrain, FaKeyboard } from "react-icons/fa";
 import { TiSortNumerically } from "react-icons/ti";
-export default function CountDown() {
+import { GetServerSideProps } from "next";
+
+export default function home() {
   function handleSubmitCountDown() {
     Router.push("/countdown");
   }
@@ -82,3 +84,19 @@ export default function CountDown() {
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { "moveit:username": username } = ctx.req.cookies;
+
+  if (!username) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+};
