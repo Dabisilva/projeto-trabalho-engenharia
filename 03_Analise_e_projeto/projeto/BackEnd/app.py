@@ -1,7 +1,8 @@
 from flask import Flask, request, jsonify, abort
-from util import bd
+from db.util import bd
 from flask_cors import CORS
 import bcrypt
+import random
 
 app = Flask(__name__)
 
@@ -36,6 +37,36 @@ def create():
 
         elif dados:
             return jsonify(message="email já cadastrado no sistema"), 401
+
+
+@app.route('/populateTableChallenges', methods = ['POST'])
+def populateTableChallenges():
+    content = request.get_json()
+    type = content['type']
+    description = content['description']
+    amount = content['amount']
+
+    comando = "INSERT INTO challenges(type, description, amount) VALUES (%s, %s, %s)"
+    cs = mysql.executar(comando, [type, description, amount])
+    if cs:
+        return jsonify(message="Challenge created"),200
+    else:
+        return jsonify(message="Error in Challenge creation"),401
+
+
+@app.route('/populateTableTyping', methods = ['POST'])
+def populateTableTyping():
+    content = request.get_json()
+    description = content['description']
+    amount = content['amount']
+
+    comando = "INSERT INTO typing(description, amount) VALUES (%s, %s)"
+    cs = mysql.executar(comando, [description, amount])
+    if cs:
+        return jsonify(message="Typing created"),200
+    else:
+        return jsonify(message="Error in Typing creation"),401
+
 
 @app.route('/login', methods = ['POST'])
 def login():
@@ -88,7 +119,7 @@ def login():
             else:
                 return jsonify(message="erro ao tentar logar"), 401
 
-@app.route('/updateLevelStats', methods = ['POST'])
+@app.route('/updateLevelStats', methods = ['PUT'])
 def updateLevelStats():
 
     content = request.get_json()
@@ -111,7 +142,7 @@ def updateLevelStats():
     else:
         return jsonify(message = "erro ao dar update"), 401
 
-@app.route('/updateUser', methods = ['POST'])
+@app.route('/updateUser', methods = ['PUT'])
 def updateUser():
 
     content = request.get_json()
@@ -179,6 +210,39 @@ def updatePassword():
             return jsonify(message='Senha alterada com sucesso!'),200
         else:
             return jsonify(message='Erro na alteração de senha'),401
+
+
+@app.route('/challenges', methods = ['GET'])
+def challenges():
+
+    comando = "SELECT count(id) FROM challenges;"
+    cs = mysql.consultar(comando, [])
+    count = cs.fetchone()
+    id = random.randrange(1,count[0]+1)
+    comando = "SELECT * FROM challenges WHERE id = %s"
+    cs = mysql.consultar(comando, [id])
+    if cs:
+        dados = cs.fetchone()
+        challenge = {"type": dados[1], "description": dados[2], "amount": dados[3]}
+        return jsonify(challenge)
+    else:
+        return jsonify(message='Erro'),401    
+
+
+@app.route('/typing', methods = ['GET'])
+def typing():
+    comando = "SELECT count(id) FROM typing;"
+    cs = mysql.consultar(comando, [])
+    count = cs.fetchone()
+    id = random.randrange(1,count[0]+1)
+    comando = "SELECT * FROM typing WHERE id = %s"
+    cs = mysql.consultar(comando, [id])
+    if cs:
+        dados = cs.fetchone()
+        typing = {"description": dados[1], "amount": dados[2]}
+        return jsonify(typing)
+    else:
+        return jsonify(message='Erro'),401
 
 
 @app.route('/leaderBoard', methods = ['GET'])
