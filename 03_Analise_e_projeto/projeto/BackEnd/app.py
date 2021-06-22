@@ -74,7 +74,6 @@ def login():
         content = request.get_json()
 
         type = content['type']
-        nome = content['nome']
         email = content['email']
 
         if type == 'normal':
@@ -87,12 +86,9 @@ def login():
             if dados:
                 passwordHash = dados[3]
                 if bcrypt.checkpw(encrypted, passwordHash.encode("utf-8")):
-                    if dados:
-                        user = {"id": dados[0], "nome": dados[1], "email": dados[2], "xp": dados[4],
-                                "challenges": dados[5], "level": dados[6]}
-                        return jsonify(user)
-                    else:
-                        return jsonify(message="erro ao tentar logar"), 401
+                    user = {"id": dados[0], "nome": dados[1], "email": dados[2], "xp": dados[4],
+                            "challenges": dados[5], "level": dados[6]}
+                    return jsonify(user)
                 else:
                     return jsonify(message="Senha invalida"), 401
             else:
@@ -101,7 +97,7 @@ def login():
             comando = "SELECT * FROM user WHERE email = %s;"
             cs = mysql.consultar(comando, [email])
             dados = cs.fetchone()
-
+            nome = content['nome']
             if dados == None:
                 comando = "INSERT INTO user(nome, email, xp, challenges, level) VALUES (%s, %s, 0, 0, 1)"
                 mysql.executar(comando, [nome, email])
