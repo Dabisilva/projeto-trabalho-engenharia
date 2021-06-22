@@ -3,12 +3,13 @@ from db.util import bd
 from flask_cors import CORS
 import bcrypt
 import random
+import os
 
 app = Flask(__name__)
 
 CORS(app)
 
-mysql = bd.SQL('root', 'root', 'moveit')
+mysql = bd.SQL("sql10420869", "1ssUM9lxSb", "sql10420869")
 
 @app.route('/create', methods = ['POST'])
 def create():
@@ -86,18 +87,21 @@ def login():
             if dados:
                 passwordHash = dados[3]
                 if bcrypt.checkpw(encrypted, passwordHash.encode("utf-8")):
-                    user = {"id": dados[0], "nome": dados[1], "email": dados[2], "xp": dados[4],
-                            "challenges": dados[5], "level": dados[6]}
-                    return jsonify(user)
+                    if dados:
+                        user = {"id": dados[0], "nome": dados[1], "email": dados[2], "xp": dados[4],
+                                "challenges": dados[5], "level": dados[6]}
+                        return jsonify(user)
+                    else:
+                        return jsonify(message="erro ao tentar logar"), 401
                 else:
                     return jsonify(message="Senha invalida"), 401
             else:
                 return jsonify(message="Email não cadastrado"), 401
         else:
+            nome = content['nome']
             comando = "SELECT * FROM user WHERE email = %s;"
             cs = mysql.consultar(comando, [email])
             dados = cs.fetchone()
-            nome = content['nome']
             if dados == None:
                 comando = "INSERT INTO user(nome, email, xp, challenges, level) VALUES (%s, %s, 0, 0, 1)"
                 mysql.executar(comando, [nome, email])
@@ -121,6 +125,13 @@ def updateLevelStats():
     content = request.get_json()
     id = content['id']
     xp = content['xp']
+
+    # comando = "SELECT xp FROM user WHERE id = %s"
+    # cs = mysql.consultar(comando, [id])
+    # data = cs.fetchone()
+    # xpsaved = data[0]
+    # updatedxp = int(xp) + int(xpsaved)
+
     challenges = content['challenges']
     level = content['level']
 
@@ -244,7 +255,7 @@ def typing():
 @app.route('/leaderBoard', methods = ['GET'])
 def leaderBoard():
     if request.method == 'GET':
-        comando = "SELECT * FROM user ORDER BY xp DESC"
+        comando = "SELECT * FROM user ORDER BY level DESC"
         cs = mysql.consultar(comando,[])
         user = []
         for [id, nome, email, senha, xp, challenges, level] in cs:
@@ -253,4 +264,13 @@ def leaderBoard():
 
         return jsonify(user)
 
-app.run()
+@app.route('/delete', methods = ['POST'])
+def delete():
+    comando = "DELETE FROM user"
+    cs = mysql.executar(comando, [])
+    if cs:
+        return jsonify(message="Users deleted"), 200
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
