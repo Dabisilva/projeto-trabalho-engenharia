@@ -18,36 +18,31 @@ export function UpdateUser() {
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
 
+    toast.warn("carregando...");
     let form = {
       id: user.id,
       nome: name,
       email: user.email,
-      newEmail: email.length == 0 ? user.email : email,
+      newEmail: email,
     };
-
-    if (name.length === 0 && email.length === 0 && !changePassword) {
-      setupdate();
-    } else if (name.length != 0 && email.length != 0 && !changePassword) {
-      await api
-        .put("updateUser", form)
-        .then((response) => {
-          getUserFromResponse(response.data, "update");
-          if (!changePassword) {
-            toast.success("Alteração realizada com sucesso", {
-              position: "top-center",
-            });
-            setupdate();
-          } else {
-            handleChangePassword();
-          }
-        })
-        .catch((err) => {
-          let message = err.response.data.message;
-          toast.error(message);
-        });
-    } else if (name.length === 0 && email.length === 0 && changePassword) {
-      handleChangePassword();
-    }
+    console.log(user);
+    await api
+      .put("updateUser", form)
+      .then((response) => {
+        getUserFromResponse(response.data, "update");
+        if (!changePassword) {
+          toast.success("Alteração realizada com sucesso", {
+            position: "top-center",
+          });
+          setupdate();
+        } else {
+          handleChangePassword();
+        }
+      })
+      .catch((err) => {
+        let message = err.response.data.message;
+        toast.error(message);
+      });
   }
 
   async function handleChangePassword() {

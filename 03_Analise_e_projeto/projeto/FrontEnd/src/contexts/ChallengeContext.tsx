@@ -63,9 +63,11 @@ export function ChallengesProvider({ children }: ChallengesProviderProps) {
     "moveit:challengesCompleted": cookieChallengeCompleted,
   } = parseCookies();
   const [level, setLevel] = useState<number>(Number(cookieLevel));
+
   const [currentExperience, setCurrentExperience] = useState<number>(
     Number(cookieCurrentExperience)
   );
+
   const [challengesCompleted, setChallengesCompleted] = useState<number>(
     Number(cookieChallengeCompleted)
   );
@@ -106,9 +108,9 @@ export function ChallengesProvider({ children }: ChallengesProviderProps) {
 
   async function startNewChallenge() {
     try {
-      const response = await api.get("challenges")
-    
-      const challenge = response.data
+      const response = await api.get("challenges");
+
+      const challenge = response.data;
 
       setActiveChallenge(challenge);
 
@@ -135,8 +137,8 @@ export function ChallengesProvider({ children }: ChallengesProviderProps) {
     }
 
     const { amount } = activeChallenge;
-    let finalExperience = currentExperience + amount;
 
+    let finalExperience = currentExperience + amount;
 
     if (finalExperience >= experienceToNextLevel) {
       finalExperience = finalExperience - experienceToNextLevel;
@@ -148,7 +150,7 @@ export function ChallengesProvider({ children }: ChallengesProviderProps) {
         levelUp: level + 1,
       };
       updateDatesChallenger(form);
-    }else {
+    } else {
       let form = {
         xp: finalExperience,
         challenges: challengesCompleted + 1,
@@ -187,7 +189,7 @@ export function ChallengesProvider({ children }: ChallengesProviderProps) {
         levelUp: level + 1,
       };
       updateDatesChallenger(form);
-    }else {
+    } else {
       let form = {
         xp: finalExperience,
         challenges: challengesCompleted + 1,
@@ -218,7 +220,7 @@ export function ChallengesProvider({ children }: ChallengesProviderProps) {
         levelUp: level + 1,
       };
       updateDatesChallenger(form);
-    }else {
+    } else {
       let form = {
         xp: finalExperience,
         challenges: challengesCompleted + 1,
@@ -249,7 +251,7 @@ export function ChallengesProvider({ children }: ChallengesProviderProps) {
         levelUp: level + 1,
       };
       updateDatesChallenger(form);
-    }else {
+    } else {
       let form = {
         xp: finalExperience,
         challenges: challengesCompleted + 1,
