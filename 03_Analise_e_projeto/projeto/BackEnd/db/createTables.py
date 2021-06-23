@@ -22,7 +22,7 @@ comando = '''
       id INT AUTO_INCREMENT PRIMARY KEY,
       nome VARCHAR(50) NOT NULL,
       email VARCHAR(50) NOT NULL,
-      senha VARCHAR(50) NOT NULL,
+      senha TEXT,
       xp INT NOT NULL,
       challenges INT NOT NULL,
       level INT NOT NULL);
